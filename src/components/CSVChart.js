@@ -117,6 +117,14 @@ function CSVChart() {
         return (((endValue / startValue) ** (1 / periods)) - 1) * 100;
     };
 
+    const calculateAverage = (data, periods) => {
+        const values = data.slice(-periods);
+        if (values.length < periods) return null;
+
+        const total = values.reduce((acc, value) => acc + parseFloat(value.replace(/[^0-9.-]+/g, "")), 0);
+        return (total / periods / 1000).toFixed(2); // Convert to billions
+    };
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setCashFlowParams((prevState) => ({
@@ -226,7 +234,7 @@ function CSVChart() {
                 style={{ marginBottom: "20px" }}
             />
 
-            <Grid container spacing={3}>
+            <Grid container>
                 {csvData.length > 0 && headers.length > 0 ? (
                     csvData.map((row, index) => {
                         const data = row.slice(1).reverse();
@@ -234,6 +242,10 @@ function CSVChart() {
                         const cagr10 = calculateCAGR(data, 10);
                         const cagr15 = calculateCAGR(data, 15);
                         const cagr20 = calculateCAGR(data, 20);
+                        const avg5 = calculateAverage(data, 5);
+                        const avg10 = calculateAverage(data, 10);
+                        const avg15 = calculateAverage(data, 15);
+                        const avg20 = calculateAverage(data, 20);
 
                         return (
                             <Grid container item spacing={3} xs={12} key={index}>
@@ -254,6 +266,13 @@ function CSVChart() {
                                                 <li>10 Years: {cagr10 ? cagr10.toFixed(2) + "%" : "N/A"}</li>
                                                 <li>15 Years: {cagr15 ? cagr15.toFixed(2) + "%" : "N/A"}</li>
                                                 <li>20 Years: {cagr20 ? cagr20.toFixed(2) + "%" : "N/A"}</li>
+                                            </ul>
+                                            <Typography variant="h6">Averages</Typography>
+                                            <ul>
+                                                <li>5 Years: {avg5 ? avg5 + " billions" : "N/A"}</li>
+                                                <li>10 Years: {avg10 ? avg10 + " billions" : "N/A"}</li>
+                                                <li>15 Years: {avg15 ? avg15 + " billions" : "N/A"}</li>
+                                                <li>20 Years: {avg20 ? avg20 + " billions" : "N/A"}</li>
                                             </ul>
                                         </CardContent>
                                     </Card>
