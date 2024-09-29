@@ -9,11 +9,11 @@ function CSVChart() {
     const [headers, setHeaders] = useState([]);
     const [cashFlowParams, setCashFlowParams] = useState({
         currentCashFlow: "",
-        growthRate: "",
-        discountRate: "",
-        terminalGrowthRate: "",
+        growthRate: "4",
+        discountRate: "8",
+        terminalGrowthRate: "2",
         marketCap: "",
-        years: "",
+        years: "10",
     });
     const [cashFlowGrowth, setCashFlowGrowth] = useState([]);
     const [discountedCashFlowGrowth, setDiscountedCashFlowGrowth] = useState([]);
@@ -106,7 +106,9 @@ function CSVChart() {
     };
 
     const calculateCAGR = (data, periods) => {
-        const values = data.slice(-periods);
+        if (data.length < periods) return null; // Return null if not enough data points for the given periods
+
+        const values = data.slice(-periods); // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
         if (values.length < 2) return null;
 
         const startValue = parseFloat(values[0].replace(/[^0-9.-]+/g, ""));
@@ -118,6 +120,8 @@ function CSVChart() {
     };
 
     const calculateAverage = (data, periods) => {
+        if (data.length < periods) return null; // Return null if not enough data points for the given periods
+
         const values = data.slice(-periods);
         if (values.length < periods) return null;
 

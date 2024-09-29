@@ -5,9 +5,6 @@ import CSVChart from "./components/CSVChart";
 function App() {
     return (
         <div>
-            <Typography variant="h4" align="center" gutterBottom>
-                Cash Flow Analyzer App
-            </Typography>
             <CSVChart />
         </div>
     );
